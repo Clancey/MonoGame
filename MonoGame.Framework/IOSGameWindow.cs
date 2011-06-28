@@ -213,7 +213,6 @@ namespace Microsoft.Xna.Framework
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
 			base.OnRenderFrame(e);
-			
 			MakeCurrent();
 						
 			// This code was commented to make the code base more iPhone like.
@@ -266,6 +265,28 @@ namespace Microsoft.Xna.Framework
 		{		
 			base.OnWindowStateChanged(e);	
 		}
+		
+		public override void MotionEnded (UIEventSubtype motion, UIEvent evt)
+		{
+			Console.WriteLine("motion:" );
+			if(motion == UIEventSubtype.MotionShake)
+			{
+				Console.WriteLine("shake on ios game window");
+				Shake(this,null);
+			}
+			else
+				base.MotionEnded(motion,evt);
+				
+			
+		}
+		
+		public override void MotionBegan (UIEventSubtype motion, UIEvent evt)
+		{
+			Console.WriteLine("motion:" );
+			base.MotionBegan (motion, evt);
+		}
+		
+		public event EventHandler Shake;
 		
 		#endregion
 				
@@ -348,8 +369,8 @@ namespace Microsoft.Xna.Framework
 					
 					//Get position touch
 					Vector2 position = new Vector2 (touch.LocationInView (touch.View));
-					Vector2 translatedPosition = GetOffsetPosition(position);
-					
+					Vector2 translatedPosition = GetOffsetPosition(position,true);
+					//Console.WriteLine(position  + " : " + translatedPosition);
 					TouchLocation tlocation;
 					TouchCollection collection = TouchPanel.Collection;
 					int index;
@@ -393,7 +414,7 @@ namespace Microsoft.Xna.Framework
 			
 		}
 		
-		private Vector2 GetOffsetPosition(Vector2 position)
+		internal Vector2 GetOffsetPosition(Vector2 position, bool useScale)
 		{
 			Vector2 translatedPosition = position * UIScreen.MainScreen.Scale;
 					
@@ -422,6 +443,8 @@ namespace Microsoft.Xna.Framework
 					break;
 				}
 			}
+			if(!useScale)
+				translatedPosition = translatedPosition / UIScreen.MainScreen.Scale;
 			return translatedPosition;
 		}
 		
@@ -431,7 +454,7 @@ namespace Microsoft.Xna.Framework
 			
 			FillTouchCollection(touches);
 			
-			GamePad.Instance.TouchesBegan(touches,evt);	
+			GamePad.Instance.TouchesBegan(touches,evt,this);	
 		}
 		
 		public override void TouchesEnded (NSSet touches, UIEvent evt)
@@ -440,7 +463,7 @@ namespace Microsoft.Xna.Framework
 			
 			FillTouchCollection(touches);	
 			
-			GamePad.Instance.TouchesEnded(touches,evt);								
+			GamePad.Instance.TouchesEnded(touches,evt,this);								
 		}
 		
 		public override void TouchesMoved (NSSet touches, UIEvent evt)
@@ -449,7 +472,7 @@ namespace Microsoft.Xna.Framework
 			
 			FillTouchCollection(touches);
 			
-			GamePad.Instance.TouchesMoved(touches,evt);
+			GamePad.Instance.TouchesMoved(touches,evt,this);
 		}
 
 		public override void TouchesCancelled (NSSet touches, UIEvent evt)

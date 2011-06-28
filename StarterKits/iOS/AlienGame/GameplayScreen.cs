@@ -151,7 +151,7 @@ namespace AlienGameSample
 
             sunPosition = new Vector2(16, 16);
 
-            particles = new ParticleSystem(ScreenManager.Game.Content, ScreenManager.SpriteBatch);
+			particles = new ParticleSystem(ScreenManager.Game.Content, ScreenManager.SpriteBatch);
 
             LoadHighscore();
 

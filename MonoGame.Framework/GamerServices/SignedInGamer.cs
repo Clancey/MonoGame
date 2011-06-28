@@ -78,11 +78,8 @@ namespace Microsoft.Xna.Framework.GamerServices
 		{
 			try 
 			{
-				var verArray = UIDevice.CurrentDevice.SystemVersion.Split( new char[] {'.'} );
-				if ( (int.Parse(verArray[0]) >= 4)
-				&& (int.Parse(verArray[1]) >= 1) )
+				if (double.Parse(UIDevice.CurrentDevice.SystemVersion) > 4.1)
 				{
-					
 					lp = GKLocalPlayer.LocalPlayer;
 			        if (lp != null)
 					{
@@ -93,7 +90,7 @@ namespace Microsoft.Xna.Framework.GamerServices
 												{
 													if ( error != null )
 													{
-									
+									Console.WriteLine(error);
 													}
 													else
 													{
@@ -109,9 +106,9 @@ namespace Microsoft.Xna.Framework.GamerServices
 					}
 				}
 			}
-			catch (Exception) 
+			catch (Exception ex) 
 			{
-				
+				Console.WriteLine(ex);
 			}
 		}
 		
@@ -312,7 +309,7 @@ namespace Microsoft.Xna.Framework.GamerServices
 			}
 		}
 		
-		public void UpdateScore( string aCategory, long aScore )
+		public void UpdateScore( string aCategory, long aScore,Action<bool> ScoreUpdated )
 		{
 			if (IsSignedInToLive)
 			{
@@ -322,11 +319,17 @@ namespace Microsoft.Xna.Framework.GamerServices
 					{
 						if (error != null)
 						{
+							Console.WriteLine(error);
 							// Oh oh something went wrong.
+							if(ScoreUpdated != null)
+								ScoreUpdated(false);
 						}
+						else if(ScoreUpdated != null)
+								ScoreUpdated(true);
 				});
 			}
 		}
+		
 		
 		public void ResetAchievements()
 		{

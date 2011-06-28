@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 #else
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -69,7 +70,7 @@ namespace Microsoft.Xna.Samples.GameStateManagement
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
 
             gameFont = content.Load<SpriteFont>("gamefont");
-            segment = content.Load<Texture2D>("segment");
+            segment = content.Load<Texture2D>("gradient");
 
             // A real game would probably have more content than this sample, so
             // it would take longer to load. We simulate that by delaying for a
@@ -148,7 +149,10 @@ namespace Microsoft.Xna.Samples.GameStateManagement
             // on PC if they are playing with a keyboard and have no gamepad at all!
             bool gamePadDisconnected = !gamePadState.IsConnected &&
                                        input.GamePadWasConnected[playerIndex];
-
+			
+			var touches = TouchPanel.GetState();
+			if(touches.Count >1 )
+				ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
             if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
             {
                 ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);

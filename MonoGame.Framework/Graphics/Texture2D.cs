@@ -197,6 +197,15 @@ namespace Microsoft.Xna.Framework.Graphics
 			
 			return result;
         }
+		
+		public static Texture2D FromImage(GraphicsDevice graphicsDevice, UIImage image)
+        {
+			
+			ESImage theTexture = new ESImage(image, graphicsDevice.PreferedFilter);			
+			Texture2D result = new Texture2D(theTexture);
+			
+			return result;
+        }
 
         public static Texture2D FromFile(GraphicsDevice graphicsDevice, Stream textureStream, int numberBytes)
         {
@@ -205,7 +214,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public static Texture2D FromFile(GraphicsDevice graphicsDevice, string filename, int width, int height)
         {
-			UIImage image = UIImage.FromBundle(filename);
+			UIImage image;
+			if(filename.Contains(".pdf"))
+				image = Extender.FromPdf(filename,width,height);
+			else
+				image = UIImage.FromFile(filename);
 			if (image == null)
 			{
 				throw new ContentLoadException("Error loading file: " + filename);

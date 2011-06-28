@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework
         private GameComponentCollection _gameComponentCollection;
         public GameServiceContainer _services;
         private ContentManager _content;
-        private GameWindow _view;
+        public GameWindow View;
 		private bool _isFixedTimeStep = true;
         private TimeSpan _targetElapsedTime = TimeSpan.FromSeconds(1 / FramesPerSecond); 
         
@@ -92,9 +92,9 @@ namespace Microsoft.Xna.Framework
 
 			//Create a full-screen window
 			_mainWindow = new UIWindow (UIScreen.MainScreen.Bounds);			
-			_view = new GameWindow();
-			_view.game = this;			
-			_mainWindow.Add(_view);							
+			View = new GameWindow();
+			View.game = this;			
+			_mainWindow.Add(View);							
 					
 			// Initialize GameTime
             _updateGameTime = new GameTime();
@@ -124,13 +124,13 @@ namespace Microsoft.Xna.Framework
                     supportedOrientations = DisplayOrientation.Portrait | DisplayOrientation.PortraitUpsideDown;
                 }
             }
-				
+				//Console.WriteLine(orientation);
 				switch (orientation)
 				{
 					case UIDeviceOrientation.Portrait :
 						if ((supportedOrientations & DisplayOrientation.Portrait) != 0)
 						{
-							_view.CurrentOrientation = DisplayOrientation.Portrait;
+							View.CurrentOrientation = DisplayOrientation.Portrait;
 							GraphicsDevice.PresentationParameters.DisplayOrientation = DisplayOrientation.Portrait;
 							TouchPanel.DisplayOrientation = DisplayOrientation.Portrait;
 						}
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Framework
 					case UIDeviceOrientation.LandscapeLeft :
 						if ((supportedOrientations & DisplayOrientation.LandscapeLeft) != 0)
 			            {
-			            	_view.CurrentOrientation = DisplayOrientation.LandscapeLeft;
+			            	View.CurrentOrientation = DisplayOrientation.LandscapeLeft;
 			             	GraphicsDevice.PresentationParameters.DisplayOrientation = DisplayOrientation.LandscapeLeft;
 			              	TouchPanel.DisplayOrientation = DisplayOrientation.LandscapeLeft;							
 			            }
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework
 					case UIDeviceOrientation.LandscapeRight :						
 						if ((supportedOrientations & DisplayOrientation.LandscapeRight) != 0)
 			            {
-			            	_view.CurrentOrientation = DisplayOrientation.LandscapeRight;
+			            	View.CurrentOrientation = DisplayOrientation.LandscapeRight;
 			            	GraphicsDevice.PresentationParameters.DisplayOrientation = DisplayOrientation.LandscapeRight;
 			            	TouchPanel.DisplayOrientation = DisplayOrientation.LandscapeRight;							
 			            }
@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Framework
 					case UIDeviceOrientation.FaceDown :
 						if ((supportedOrientations & DisplayOrientation.FaceDown) != 0)
 						{
-							_view.CurrentOrientation = DisplayOrientation.FaceDown;
+							View.CurrentOrientation = DisplayOrientation.FaceDown;
 							GraphicsDevice.PresentationParameters.DisplayOrientation = DisplayOrientation.FaceDown;
 							TouchPanel.DisplayOrientation = DisplayOrientation.FaceDown;							
 						}
@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Framework
 					case UIDeviceOrientation.FaceUp :
 						if ((supportedOrientations & DisplayOrientation.FaceUp) != 0)						
 						{
-							_view.CurrentOrientation = DisplayOrientation.FaceUp;
+							View.CurrentOrientation = DisplayOrientation.FaceUp;
 							GraphicsDevice.PresentationParameters.DisplayOrientation = DisplayOrientation.FaceUp;
 							TouchPanel.DisplayOrientation = DisplayOrientation.FaceUp;
 						}
@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Framework
 					case UIDeviceOrientation.PortraitUpsideDown :
 						if ((supportedOrientations & DisplayOrientation.PortraitUpsideDown) != 0)						
 						{
-							_view.CurrentOrientation = DisplayOrientation.PortraitUpsideDown;
+							View.CurrentOrientation = DisplayOrientation.PortraitUpsideDown;
 							GraphicsDevice.PresentationParameters.DisplayOrientation = DisplayOrientation.PortraitUpsideDown;
 							TouchPanel.DisplayOrientation = DisplayOrientation.PortraitUpsideDown;
 						}
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework
 					case UIDeviceOrientation.Unknown :
 						if ((supportedOrientations & DisplayOrientation.Unknown) != 0)						
 						{
-							_view.CurrentOrientation = DisplayOrientation.Unknown;
+							View.CurrentOrientation = DisplayOrientation.Unknown;
 							TouchPanel.DisplayOrientation = DisplayOrientation.Unknown;
 						}
 						break;						
@@ -241,11 +241,11 @@ namespace Microsoft.Xna.Framework
     	{			
 			_lastUpdate = DateTime.Now;
 			
-			_view.Run( FramesPerSecond / ( FramesPerSecond * TargetElapsedTime.TotalSeconds ) );	
+			View.Run( FramesPerSecond / ( FramesPerSecond * TargetElapsedTime.TotalSeconds ) );	
 			
-			_view.MainContext = _view.EAGLContext;
-			_view.ShareGroup = _view.MainContext.ShareGroup;
-			_view.BackgroundContext = new MonoTouch.OpenGLES.EAGLContext(_view.ContextRenderingApi, _view.ShareGroup);
+			View.MainContext = View.EAGLContext;
+			View.ShareGroup = View.MainContext.ShareGroup;
+			View.BackgroundContext = new MonoTouch.OpenGLES.EAGLContext(View.ContextRenderingApi, View.ShareGroup);
 			
 			//Show the window			
 			_mainWindow.MakeKeyAndVisible();	
@@ -304,7 +304,7 @@ namespace Microsoft.Xna.Framework
         {
             get
             {
-                return _view;
+                return View;
             }
         }
 		
@@ -422,14 +422,14 @@ namespace Microsoft.Xna.Framework
 		
 		private void InitializeGameComponents()
 		{
-			EAGLContext.SetCurrentContext(_view.BackgroundContext);
+			EAGLContext.SetCurrentContext(View.BackgroundContext);
 			
 			foreach (GameComponent gc in _gameComponentCollection)
             {
                 gc.Initialize();
             }
 			
-			EAGLContext.SetCurrentContext(_view.MainContext);
+			EAGLContext.SetCurrentContext(View.MainContext);
 		}
 
         protected virtual void Update(GameTime gameTime)

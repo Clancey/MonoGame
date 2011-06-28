@@ -27,16 +27,6 @@ namespace Microsoft.Xna.Samples.GameStateManagement
         GraphicsDeviceManager graphics;
         ScreenManager screenManager;
 
-#if ZUNE
-        int BufferWidth = 272;
-        int BufferHeight = 480;
-#elif IPHONE
-        int BufferWidth = 320;
-        int BufferHeight = 480;
-#else
-        int BufferWidth = 272;
-        int BufferHeight = 480;
-#endif
         #endregion
 
         #region Initialization
@@ -47,12 +37,12 @@ namespace Microsoft.Xna.Samples.GameStateManagement
         /// </summary>
         public GameStateManagementGame()
         {
-            Content.RootDirectory = "Content";
-
             graphics = new GraphicsDeviceManager(this);
-
-            graphics.PreferredBackBufferWidth = BufferWidth;
-            graphics.PreferredBackBufferHeight = BufferHeight;
+			graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+			Content.RootDirectory = "Content";
+			graphics.IsFullScreen = true;
+			graphics.PreferredBackBufferHeight = 100;
+			graphics.PreferredBackBufferWidth = 400;
 
             // Create the screen manager component.
             screenManager = new ScreenManager(this);

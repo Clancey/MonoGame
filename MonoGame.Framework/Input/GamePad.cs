@@ -55,7 +55,7 @@ using MonoTouch.AudioToolbox;
 		private bool _visible;
 		private List<ButtonDefinition> _buttonsDefinitions;
 		private ThumbStickDefinition _leftThumbDefinition,_rightThumbDefinition;
-		private Color _alphaColor = Color.DarkGray;		
+		private Color _alphaColor = Color.White;		
 		private int _buttons;
 		private Vector2 _leftStick, _rightStick;
 		
@@ -187,7 +187,7 @@ using MonoTouch.AudioToolbox;
 			return  thumbRect.Contains(location); 
 		}
 		
-		internal void TouchesBegan( MonoTouch.Foundation.NSSet touches, MonoTouch.UIKit.UIEvent e)
+		internal void TouchesBegan( MonoTouch.Foundation.NSSet touches, MonoTouch.UIKit.UIEvent e, GameWindow window)
 		{
 			// Reset State		
 			Reset();
@@ -197,7 +197,8 @@ using MonoTouch.AudioToolbox;
 			foreach(UITouch touch in touchesArray)
 			{
 				Vector2 location = new Vector2(touch.LocationInView(touch.View));
-				
+				location = window.GetOffsetPosition(location,false);
+				//Console.WriteLine("on Game pad:" + location);
 				// Check where is the touch
 				bool hitInButton = false;
 				
@@ -237,12 +238,13 @@ using MonoTouch.AudioToolbox;
 			// do nothing
 		}
 		
-		internal void TouchesMoved( MonoTouch.Foundation.NSSet touches, MonoTouch.UIKit.UIEvent e)
+		internal void TouchesMoved( MonoTouch.Foundation.NSSet touches, MonoTouch.UIKit.UIEvent e,GameWindow window)
 		{
 			UITouch []touchesArray = touches.ToArray<UITouch>();
 			foreach(UITouch touch in touchesArray)
 			{
 				Vector2 location = new Vector2(touch.LocationInView(touch.View));
+				location = window.GetOffsetPosition(location,false);
 				// Check if touch any button
 				bool hitInButton = false;
 				if (Visible)
@@ -307,13 +309,13 @@ using MonoTouch.AudioToolbox;
 			}		
 		}
 		
-		internal void TouchesEnded( MonoTouch.Foundation.NSSet touches, MonoTouch.UIKit.UIEvent e)
+		internal void TouchesEnded( MonoTouch.Foundation.NSSet touches, MonoTouch.UIKit.UIEvent e, GameWindow window)
 		{						
 			UITouch []touchesArray = touches.ToArray<UITouch>();
 			foreach(UITouch touch in touchesArray)
 			{
 				Vector2 location = new Vector2(touch.LocationInView(touch.View).X, touch.LocationInView(touch.View).Y);
-				
+				location = window.GetOffsetPosition(location,false);
 				// Check where is the touch
 				if (Visible)
 				{

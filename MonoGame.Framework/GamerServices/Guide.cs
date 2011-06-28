@@ -299,9 +299,20 @@ namespace Microsoft.Xna.Framework.GamerServices
 				GamerServicesComponent.LocalNetworkGamer.SignedInGamer.BeginAuthentication(null, null);
 			}
 		}
-
+		
+		public static void UpdateScore(string category,long score,Action<bool> completed)
+		{
+			if(GamerServicesComponent.LocalNetworkGamer == null)
+			{
+				if(completed != null)
+					completed(false);
+			}
+			GamerServicesComponent.LocalNetworkGamer.SignedInGamer.UpdateScore(category,score,completed);
+		}
+		
 		public static void ShowLeaderboard()
 		{
+			Console.WriteLine("signed into live?" + Gamer.SignedInGamers[0].IsSignedInToLive);
 			if ( ( Gamer.SignedInGamers.Count > 0 ) && ( Gamer.SignedInGamers[0].IsSignedInToLive ) )
 			{
 				// Lazy load it
@@ -309,24 +320,28 @@ namespace Microsoft.Xna.Framework.GamerServices
 				{			    	
 					leaderboardController = new GKLeaderboardViewController();
 				}
-
+				Console.WriteLine("leader" + leaderboardController == null);
 			    if (leaderboardController != null)			
 			    {
 					leaderboardController.DidFinish += delegate(object sender, EventArgs e) 
 					{
+						Console.WriteLine("did finish");
 						leaderboardController.DismissModalViewControllerAnimated(true);
 						isVisible = false;
  					};
-
+					
+					
+					Console.WriteLine("window null?" + Window != null);
 					if (Window !=null)
 					{						
 						if(viewController == null)
 						{
+							Console.WriteLine("vc != null");
 							viewController = new UIViewController();
 							Window.Add(viewController.View);
 							viewController.View.Hidden = true;
 						}
-
+						Console.WriteLine("presenting modally");
 						viewController.PresentModalViewController(leaderboardController, true);
 						isVisible = true;
 					}

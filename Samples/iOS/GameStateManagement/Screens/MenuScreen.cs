@@ -13,6 +13,7 @@ using System.Collections.Generic;
 #if IPHONE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
 #else
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -76,6 +77,39 @@ namespace Microsoft.Xna.Samples.GameStateManagement
         /// </summary>
         public override void HandleInput(InputState input)
         {
+			
+			var touches  = TouchPanel.GetState();
+			if( touches.Count == 1)
+			{
+				var touch = touches[0];
+				if(touch.State == TouchLocationState.Pressed  || touch.State == TouchLocationState.Moved)
+				{
+					for (int i = 0; i < menuEntries.Count; i++)
+					{
+						MenuEntry menuEntry = menuEntries[i];
+						if(i == 1)
+						{
+							Console.WriteLine(menuEntry.Frame);
+							Console.WriteLine(touch.State);
+							Console.WriteLine(touch.Position);
+						}
+						if(menuEntry.Frame.Contains(touch.Position))
+							selectedEntry = i;
+					}	
+				}
+				else if (touch.State ==  TouchLocationState.Released	)
+				{
+					for (int i = 0; i < menuEntries.Count; i++)
+					{
+						MenuEntry menuEntry = menuEntries[i];
+						if(menuEntry.Frame.Contains(touch.Position))
+							OnSelectEntry(i, PlayerIndex.One);
+					}
+				}
+				
+			}
+			
+			
             // Move to the previous menu entry?
             if (input.IsMenuUp(ControllingPlayer))
             {

@@ -12,6 +12,7 @@ using System;
 #if IPHONE
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
 #else
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -115,7 +116,8 @@ namespace Microsoft.Xna.Samples.GameStateManagement
                 selectionFade = Math.Max(selectionFade - fadeSpeed, 0);
         }
 
-
+		public Rectangle Frame {get;set;}
+		
         /// <summary>
         /// Draws the menu entry. This can be overridden to customize the appearance.
         /// </summary>
@@ -144,6 +146,9 @@ namespace Microsoft.Xna.Samples.GameStateManagement
 
             spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);
+			Frame = new Rectangle((int)position.X,(int)position.Y,
+			                      (int)(text.ToCharArray().Length * (screen.ScreenManager.Font.Spacing + screen.ScreenManager.Font.FontSize)),
+			                      (int)screen.ScreenManager.Font.LineSpacing);
         }
 
 

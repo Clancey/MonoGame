@@ -8,7 +8,7 @@
     <ProjectGuid>{F5FA28E2-53B2-482B-8723-71588DF50BB6}</ProjectGuid>
     <ProjectTypeGuids>{E613F3A2-FE9C-494F-B74E-F63BCB86FEA6};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <RootNamespace>MonoGame.Samples.BouncingBox</RootNamespace>
     <BundleDisplayName>Bouncing Box</BundleDisplayName>
     <BundleIcon>monogameicon.png</BundleIcon>
@@ -139,6 +139,11 @@
   <ItemGroup>
     <None Include="monogameicon.png" />
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties InternalTargetFrameworkVersion="IPhone" />
+    </MonoDevelop>
+  </ProjectExtensions>
   <ItemGroup>
     <ProjectReference Include="..\..\..\MonoGame.Framework\MonoGame.Framework.iOS.csproj">
       <Project>{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}</Project>
