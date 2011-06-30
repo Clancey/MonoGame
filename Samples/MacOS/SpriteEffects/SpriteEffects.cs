@@ -44,7 +44,7 @@ namespace SpriteEffects
 			Normalmap,
 		}
 
-		DemoEffect currentEffect = DemoEffect.Normalmap;
+		DemoEffect currentEffect = DemoEffect.RefractGlacier;
 
 		// Effects used by this sample.
 		Effect desaturateEffect;
@@ -226,10 +226,7 @@ namespace SpriteEffects
 				MoveInCircle (gameTime, catTexture, 1), 
 				new Color (255, 255, 255, fade));			
 
-			disappearEffect.Parameters ["OverlaySampler"].SetValue (
-						waterfallTexture);
 			// End the sprite batch.
-
 			spriteBatch.End ();
 		}
 
@@ -260,8 +257,7 @@ namespace SpriteEffects
 			spriteBatch.Draw (catTexture, 
 				MoveInCircle (gameTime, catTexture, 1), 
 				Color.White);
-			refractionEffect.Parameters ["DisplacementSampler"].SetValue (
-						waterfallTexture);
+
 			// End the sprite batch.
 			spriteBatch.End ();
 		}
@@ -273,19 +269,14 @@ namespace SpriteEffects
 		/// </summary>
 		void DrawRefractGlacier (GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.White);
-//			// Draw the background image.
-//			spriteBatch.Begin ();
-//			spriteBatch.Draw (glacierTexture, GraphicsDevice.Viewport.Bounds, Color.White);
-//			spriteBatch.End ();
-			
+
 			// Set an effect parameter to make the
 			// displacement texture scroll in a giant circle.
 			refractionEffect.Parameters ["DisplacementScroll"].SetValue (
 							MoveInCircle (gameTime, 0.2f));
 
 			// Set the displacement texture.
-			graphics.GraphicsDevice.Textures [1] = waterfallTexture;
+			graphics.GraphicsDevice.Textures [1] = glacierTexture;
 
 			// Begin the sprite batch.
 			spriteBatch.Begin (0, null, null, null, null, refractionEffect);
@@ -304,10 +295,9 @@ namespace SpriteEffects
 						glacierTexture.Height - 64);
 			spriteBatch.Draw (glacierTexture, 
 				GraphicsDevice.Viewport.Bounds, 
-				croppedGlacier, 
+				//croppedGlacier, 
 				Color.White);
-			refractionEffect.Parameters ["DisplacementSampler"].SetValue (
-						waterfallTexture);
+
 			// End the sprite batch.
 			spriteBatch.End ();
 		}
@@ -345,9 +335,8 @@ namespace SpriteEffects
 			spriteBatch.Begin (0, null, null, null, null, normalmapEffect);
 
 			// Draw the sprite.
-			spriteBatch.Draw (catTexture, CenterOnScreen (catTexture), Color.White);
-			normalmapEffect.Parameters ["NormalSampler"].SetValue (
-						catNormalmapTexture);
+			spriteBatch.Draw (catTexture, CenterOnScreen (catTexture), Color.Azure);
+
 			// End the sprite batch.
 			spriteBatch.End ();
 			// End the sprite batch.

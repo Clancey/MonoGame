@@ -30,6 +30,13 @@ namespace Microsoft.Xna.Framework.Graphics
 			internalLength = paramLength;
 			
 			switch (paramSType ){
+			case "Float":
+				paramType = EffectParameterType.Single;
+				paramClass = EffectParameterClass.Scalar;
+				rowCount = 1;
+				colCount = 1;
+				_cachedValue = 0.0f;
+				break;				
 			case "FloatVec2":
 				paramType = EffectParameterType.Single;
 				paramClass = EffectParameterClass.Vector;
@@ -37,11 +44,32 @@ namespace Microsoft.Xna.Framework.Graphics
 				colCount = 2;
 				_cachedValue = MonoMac.OpenGL.Vector2.Zero;
 				break;
+			case "FloatVec3":
+				paramType = EffectParameterType.Single;
+				paramClass = EffectParameterClass.Vector;
+				rowCount = 1;
+				colCount = 3;
+				_cachedValue = MonoMac.OpenGL.Vector3.Zero;
+				break;	
+			case "FloatVec4":
+				paramType = EffectParameterType.Single;
+				paramClass = EffectParameterClass.Vector;
+				rowCount = 1;
+				colCount = 4;
+				_cachedValue = MonoMac.OpenGL.Vector4.Zero;
+				break;				
 			case "Sampler2D":
 				paramType = EffectParameterType.Texture2D;
 				paramClass = EffectParameterClass.Object;
 				rowCount = 0;
 				colCount = 0;
+				break;				
+			case "FloatMat4":
+				paramType = EffectParameterType.Single;
+				paramClass = EffectParameterClass.Matrix;
+				rowCount = 4;
+				colCount = 4;
+				_cachedValue = MonoMac.OpenGL.Matrix4.Identity;
 				break;				
 				
 			}
@@ -219,6 +247,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue (Single value)
 		{
+			GL.UseProgram(_parentEffect.CurrentTechnique.Passes[0].shaderProgram);			
+			//MonoMac.OpenGL.Vector2 vect2 = new MonoMac.OpenGL.Vector2(value.X, value.Y);
+			_cachedValue = value;
+			GL.Uniform1(internalIndex,value);
+			GL.UseProgram(0);		
 		}
 
 		public void SetValue (Single[] value)
@@ -234,7 +267,6 @@ namespace Microsoft.Xna.Framework.Graphics
 			GL.UseProgram(_parentEffect.CurrentTechnique.Passes[0].shaderProgram);
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D,value._textureId);
-			GL.Enable(EnableCap.Texture2D);
 			GL.Uniform1(internalIndex, value._textureId);
 			_cachedValue = value._textureId;
 			GL.UseProgram(0);

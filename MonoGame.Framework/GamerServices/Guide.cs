@@ -52,6 +52,7 @@ using MonoTouch.GameKit;
 
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.Input.Touch;
 
 
 #endregion Using clause
@@ -320,30 +321,30 @@ namespace Microsoft.Xna.Framework.GamerServices
 				{			    	
 					leaderboardController = new GKLeaderboardViewController();
 				}
-				Console.WriteLine("leader" + leaderboardController == null);
+				//Console.WriteLine("leader" + leaderboardController == null);
 			    if (leaderboardController != null)			
 			    {
 					leaderboardController.DidFinish += delegate(object sender, EventArgs e) 
 					{
-						Console.WriteLine("did finish");
+						//Console.WriteLine("did finish");
 						leaderboardController.DismissModalViewControllerAnimated(true);
 						isVisible = false;
  					};
 					
 					
-					Console.WriteLine("window null?" + Window != null);
+					//Console.WriteLine("window null?" + Window != null);
 					if (Window !=null)
 					{						
 						if(viewController == null)
 						{
-							Console.WriteLine("vc != null");
+							//Console.WriteLine("vc != null");
 							viewController = new UIViewController();
 							Window.Add(viewController.View);
 							viewController.View.Hidden = true;
 						}
-						Console.WriteLine("presenting modally");
 						viewController.PresentModalViewController(leaderboardController, true);
 						isVisible = true;
+						TouchPanel.Reset();
 					}
 			    }
 			}

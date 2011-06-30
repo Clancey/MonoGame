@@ -34,61 +34,38 @@ namespace Microsoft.Xna.Framework.Graphics
 		}
 
         public void Begin()
-        {
-            _sortMode = SpriteSortMode.Deferred;
-            _blendState = BlendState.AlphaBlend;
-            _depthStencilState = DepthStencilState.None;
-            _samplerState = SamplerState.LinearClamp;
-            _rasterizerState = RasterizerState.CullCounterClockwise;
-            _matrix = Matrix.Identity;
-        }
+		{
+			Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity );			
+		}
+		
+		public void Begin(SpriteSortMode sortMode, BlendState blendState)
+		{
+			Begin( sortMode, blendState, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Matrix.Identity );			
+		}
+		
+		public void Begin(SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState )
+		{	
+			Begin( sortMode, blendState, samplerState, depthStencilState, rasterizerState, null, Matrix.Identity );	
+		}
+		
+		public void Begin(SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState, Effect effect)
+		{
+			Begin( sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, Matrix.Identity );			
+		}
+		
+		public void Begin(SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState, Effect effect, Matrix transformMatrix)
+		{
+			_sortMode = sortMode;
 
-        public void Begin(SpriteSortMode sortMode, BlendState blendState)
-        {
-            _sortMode = sortMode;
-            _blendState = (blendState == null) ? BlendState.AlphaBlend : blendState;
-            _depthStencilState = DepthStencilState.None;
-            _samplerState = SamplerState.LinearClamp;
-            _rasterizerState = RasterizerState.CullCounterClockwise;
-            _matrix = Matrix.Identity;
-        }
-
-        public void Begin(SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState)
-        {
-            _sortMode = sortMode;
-
-            _blendState = (blendState == null) ? BlendState.AlphaBlend : blendState;
-            _depthStencilState = (depthStencilState == null) ? DepthStencilState.None : depthStencilState;
-            _samplerState = (samplerState == null) ? SamplerState.LinearClamp : samplerState;
-            _rasterizerState = (rasterizerState == null) ? RasterizerState.CullCounterClockwise : rasterizerState;
-
-            _matrix = Matrix.Identity;
-        }
-
-        public void Begin(SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState, Effect effect)
-        {
-            _sortMode = sortMode;
-
-            _blendState = (blendState == null) ? BlendState.AlphaBlend : blendState;
-            _depthStencilState = (depthStencilState == null) ? DepthStencilState.None : depthStencilState;
-            _samplerState = (samplerState == null) ? SamplerState.LinearClamp : samplerState;
-            _rasterizerState = (rasterizerState == null) ? RasterizerState.CullCounterClockwise : rasterizerState;
-
-            _effect = effect;
-        }
-
-        public void Begin(SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState, Effect effect, Matrix transformMatrix)
-        {
-            _sortMode = sortMode;
-
-            _blendState = (blendState == null) ? BlendState.AlphaBlend : blendState;
-            _depthStencilState = (depthStencilState == null) ? DepthStencilState.None : depthStencilState;
-            _samplerState = (samplerState == null) ? SamplerState.LinearClamp : samplerState;
-            _rasterizerState = (rasterizerState == null) ? RasterizerState.CullCounterClockwise : rasterizerState;
-
-            _effect = effect;
-            _matrix = transformMatrix;
-        }
+			_blendState = blendState ?? BlendState.AlphaBlend;
+			_depthStencilState = depthStencilState ?? DepthStencilState.None;
+			_samplerState = samplerState ?? SamplerState.LinearClamp;
+			_rasterizerState = rasterizerState ?? RasterizerState.CullCounterClockwise;
+			
+			if(effect != null)
+				_effect = effect;
+			_matrix = transformMatrix;
+		}
 		
 		public void End()
 		{
@@ -98,13 +75,13 @@ namespace Microsoft.Xna.Framework.Graphics
 			// set the blend mode
 			if ( _blendState == BlendState.NonPremultiplied )
 			{
-                GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
+                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 				GL.Enable(EnableCap.Blend);
 			}
 			
 			if ( _blendState == BlendState.AlphaBlend )
 			{
-                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+                GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
                 GL.Enable(EnableCap.Blend);				
 			}
 			
@@ -215,13 +192,13 @@ namespace Microsoft.Xna.Framework.Graphics
 			Vector2 texCoordTL = texture.Image.GetTextureCoord ( rect.X, rect.Y );
 			Vector2 texCoordBR = texture.Image.GetTextureCoord ( rect.X+rect.Width, rect.Y+rect.Height );
 			
-			if ( effect == SpriteEffects.FlipVertically )
+			if ( (effect & SpriteEffects.FlipVertically) != 0 )
 			{
 				float temp = texCoordBR.Y;
 				texCoordBR.Y = texCoordTL.Y;
 				texCoordTL.Y = temp;
 			}
-			else if ( effect == SpriteEffects.FlipHorizontally )
+			if ( (effect & SpriteEffects.FlipHorizontally) != 0 )
 			{
 				float temp = texCoordBR.X;
 				texCoordBR.X = texCoordTL.X;
@@ -276,13 +253,13 @@ namespace Microsoft.Xna.Framework.Graphics
 			Vector2 texCoordTL = texture.Image.GetTextureCoord ( rect.X, rect.Y );
 			Vector2 texCoordBR = texture.Image.GetTextureCoord ( rect.X+rect.Width, rect.Y+rect.Height );
 			
-			if ( effect == SpriteEffects.FlipVertically )
+			if ( (effect & SpriteEffects.FlipVertically) != 0 )
 			{
 				float temp = texCoordBR.Y;
 				texCoordBR.Y = texCoordTL.Y;
 				texCoordTL.Y = temp;
 			}
-			else if ( effect == SpriteEffects.FlipHorizontally )
+			if ( (effect & SpriteEffects.FlipHorizontally) != 0 )
 			{
 				float temp = texCoordBR.X;
 				texCoordBR.X = texCoordTL.X;
@@ -333,13 +310,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			Vector2 texCoordTL = texture.Image.GetTextureCoord ( rect.X, rect.Y );
 			Vector2 texCoordBR = texture.Image.GetTextureCoord ( rect.X+rect.Width, rect.Y+rect.Height );
-			if ( effect == SpriteEffects.FlipVertically )
+			if ( (effect & SpriteEffects.FlipVertically) != 0 )
 			{
 				float temp = texCoordBR.Y;
 				texCoordBR.Y = texCoordTL.Y;
 				texCoordTL.Y = temp;
 			}
-			else if ( effect == SpriteEffects.FlipHorizontally )
+			if ( (effect & SpriteEffects.FlipHorizontally) != 0 )
 			{
 				float temp = texCoordBR.X;
 				texCoordBR.X = texCoordTL.X;

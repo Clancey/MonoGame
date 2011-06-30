@@ -59,6 +59,7 @@ using OpenTK.Graphics.ES20;
 
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoTouch.CoreGraphics;
 #endregion Using Statements
 
 namespace Microsoft.Xna.Framework
@@ -362,11 +363,9 @@ namespace Microsoft.Xna.Framework
 				UITouch []touchesArray = touches.ToArray<UITouch>();
 				
 				for (int i=0; i < touchesArray.Length;i++)
-				{
-					
+				{	
 					//Get IOS touch
 					UITouch touch = touchesArray[i];
-					
 					//Get position touch
 					Vector2 position = new Vector2 (touch.LocationInView (touch.View));
 					Vector2 translatedPosition = GetOffsetPosition(position,true);
@@ -427,19 +426,19 @@ namespace Microsoft.Xna.Framework
 				
 				case DisplayOrientation.LandscapeRight :
 				{				
-					translatedPosition = new Vector2( ClientBounds.Height - translatedPosition.Y, translatedPosition.X );							
+					//translatedPosition = new Vector2( ClientBounds.Height - translatedPosition.Y, translatedPosition.X );							
 					break;
 				}
 				
 				case DisplayOrientation.LandscapeLeft :
 				{							
-					translatedPosition = new Vector2( translatedPosition.Y, ClientBounds.Width - translatedPosition.X );							
+					//translatedPosition = new Vector2( translatedPosition.Y, ClientBounds.Width - translatedPosition.X );							
 					break;
 				}
 				
 				case DisplayOrientation.PortraitUpsideDown :
 				{				
-					translatedPosition = new Vector2( ClientBounds.Width - translatedPosition.X, ClientBounds.Height - translatedPosition.Y );							
+					//translatedPosition = new Vector2( ClientBounds.Width - translatedPosition.X, ClientBounds.Height - translatedPosition.Y );							
 					break;
 				}
 			}
@@ -463,7 +462,8 @@ namespace Microsoft.Xna.Framework
 			
 			FillTouchCollection(touches);	
 			
-			GamePad.Instance.TouchesEnded(touches,evt,this);								
+			GamePad.Instance.TouchesEnded(touches,evt,this);	
+			Console.WriteLine("touches ended");
 		}
 		
 		public override void TouchesMoved (NSSet touches, UIEvent evt)
