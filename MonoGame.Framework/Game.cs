@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Framework
         public GameServiceContainer _services;
         private ContentManager _content;
         public GameWindow View;
-		private GameVc gameVc;
+		internal static  GameVc gameVc;
 		private bool _isFixedTimeStep = true;
         private TimeSpan _targetElapsedTime = TimeSpan.FromSeconds(1 / FramesPerSecond); 
         

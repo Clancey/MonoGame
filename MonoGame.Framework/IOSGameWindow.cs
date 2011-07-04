@@ -463,7 +463,7 @@ namespace Microsoft.Xna.Framework
 			FillTouchCollection(touches);	
 			
 			GamePad.Instance.TouchesEnded(touches,evt,this);	
-			Console.WriteLine("touches ended");
+			//Console.WriteLine("touches ended");
 		}
 		
 		public override void TouchesMoved (NSSet touches, UIEvent evt)

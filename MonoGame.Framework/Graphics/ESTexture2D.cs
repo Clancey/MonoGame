@@ -124,13 +124,15 @@ namespace Microsoft.Xna.Framework.Graphics
 				height = i;
 			}
 			// TODO: kMaxTextureSize = 1024
-			while((width > 1024) || (height > 1024)) 
+			var maxSide = Math.Max(width,height);
+			if(maxSide > 1024)
 			{
-				width /= 2;
-				height /= 2;
-				transform = CGAffineTransform.MakeScale(0.5f,0.5f);
-				imageSize.Width /= 2;
-				imageSize.Height /= 2;
+				float scale = (float)1024 / (float)maxSide;
+				width = (int)(width * scale);
+				height = (int)(width * scale);
+				transform = CGAffineTransform.MakeScale(scale,scale);
+				imageSize.Width = (int)(imageSize.Width * scale);
+				imageSize.Height = (int)(imageSize.Height * scale);
 			}
 			
 			switch(pixelFormat) 

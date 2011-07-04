@@ -60,7 +60,6 @@ using Microsoft.Xna.Framework.Input.Touch;
 namespace Microsoft.Xna.Framework.GamerServices
 {
 
-
 	public static class Guide
 	{
 		private static bool isScreenSaverEnabled;
@@ -359,28 +358,20 @@ namespace Microsoft.Xna.Framework.GamerServices
 				{
 					achievementController = new GKAchievementViewController();
 				}
+					
+				achievementController.DidFinish += delegate(object sender, EventArgs e) 
+				{									 
+					Game.gameVc.DismissModalViewControllerAnimated(true);
+					isVisible = false;
+				};
 
-			    if (achievementController != null)		
-			    {					
-					achievementController.DidFinish += delegate(object sender, EventArgs e) 
-					{									 
-						achievementController.DismissModalViewControllerAnimated(true);
-						isVisible = false;
-					};
+				if (Window !=null)
+				{
+					
 
-					if (Window !=null)
-					{
-						if(viewController == null)
-						{
-							viewController = new UIViewController();
-							Window.Add(viewController.View);
-							viewController.View.Hidden = true;
-						}
-
-						viewController.PresentModalViewController(achievementController, true);						
-						isVisible = true;
-					}
-			    }
+					Game.gameVc.PresentModalViewController(achievementController, true);						
+					isVisible = true;
+				}
 			}
 		}
 

@@ -104,6 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				case DisplayOrientation.LandscapeLeft:
                 {
 					//GL.Rotate(-90, 0, 0, 1); 
+					//Console.WriteLine(this.graphicsDevice.Viewport.Height + ","  + this.graphicsDevice.Viewport.Width);
 					GL.Ortho(0, this.graphicsDevice.Viewport.Height, this.graphicsDevice.Viewport.Width,  0, -1, 1);
 					break;
 				}
@@ -111,6 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				case DisplayOrientation.LandscapeRight:
                 {
 					//GL.Rotate(90, 0, 0, 1); 
+					//Console.WriteLine(this.graphicsDevice.Viewport.Height + ","  + this.graphicsDevice.Viewport.Width);
 					GL.Ortho(0, this.graphicsDevice.Viewport.Height, this.graphicsDevice.Viewport.Width,  0, -1, 1);
 					break;
 				}
@@ -118,6 +120,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			case DisplayOrientation.PortraitUpsideDown:
                 {
 					//GL.Rotate(180, 0, 0, 1); 
+					//Console.WriteLine(this.graphicsDevice.Viewport.Width + ","  + this.graphicsDevice.Viewport.Height);
 					GL.Ortho(0, this.graphicsDevice.Viewport.Width, this.graphicsDevice.Viewport.Height,  0, -1, 1);
 					break;
 				}
