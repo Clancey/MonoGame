@@ -138,9 +138,21 @@ namespace Microsoft.Xna.Framework.Graphics
 				GL.Enable(All.ScissorTest);				
 			}
 			
-			GL.MatrixMode(All.Modelview);			
-			
-			GL.Viewport(0, 0, this.graphicsDevice.Viewport.Width, this.graphicsDevice.Viewport.Height);
+			GL.MatrixMode(All.Modelview);
+			if(!Util.CanUseGameCenter)
+				switch (this.graphicsDevice.PresentationParameters.DisplayOrientation)
+				{
+					case DisplayOrientation.LandscapeLeft:
+					case DisplayOrientation.LandscapeRight:
+						GL.Viewport(0, 0, this.graphicsDevice.Viewport.Height, this.graphicsDevice.Viewport.Width);	
+						break;
+					default:
+						GL.Viewport(0, 0, this.graphicsDevice.Viewport.Width, this.graphicsDevice.Viewport.Height);	
+						break;
+					
+				}
+			else
+				GL.Viewport(0, 0, this.graphicsDevice.Viewport.Width, this.graphicsDevice.Viewport.Height);
 			
 			// Enable Scissor Tests if necessary
 			if ( this.graphicsDevice.RenderState.ScissorTestEnable )
