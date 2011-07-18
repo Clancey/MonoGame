@@ -66,6 +66,9 @@ namespace Microsoft.Xna.Framework
 					
 			}
 		}
+		public static bool IsIpad {
+			get {return UIScreen.MainScreen.Bounds.Width > 500;	}
+		}
 	}
 }
 

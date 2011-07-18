@@ -54,6 +54,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoTouch.CoreGraphics;
+using System.Linq;
 
 namespace Microsoft.Xna.Framework
 {
@@ -89,6 +91,7 @@ namespace Microsoft.Xna.Framework
 			return true;
 			//return base.ShouldAutorotateToInterfaceOrientation (toInterfaceOrientation);
 		}
+		
 		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
 		{
 			/*
@@ -107,6 +110,8 @@ namespace Microsoft.Xna.Framework
 			*/
 			base.DidRotate (fromInterfaceOrientation);
 		}
+		
+		
 	}
     public class Game : IDisposable
     {
@@ -122,7 +127,7 @@ namespace Microsoft.Xna.Framework
         public GameServiceContainer _services;
         private ContentManager _content;
         public GameWindow View;
-		internal static  GameVc gameVc;
+		internal static GameVc gameVc;
 		private bool _isFixedTimeStep = true;
         private TimeSpan _targetElapsedTime = TimeSpan.FromSeconds(1 / FramesPerSecond); 
         
@@ -429,7 +434,10 @@ namespace Microsoft.Xna.Framework
 		
 		protected virtual void LoadContent()
 		{			
-			string DefaultPath = "Default.png";
+			var DefaultPath = DefaultPngFile;
+			//string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), "Default*~iphone.png",SearchOption.TopDirectoryOnly);
+			
+			Console.WriteLine(DefaultPath);
 			if (File.Exists(DefaultPath))
 			{
 				// Store the RootDir for later 
@@ -441,7 +449,11 @@ namespace Microsoft.Xna.Framework
 					Content.RootDirectory = string.Empty;
 					
 					spriteBatch = new SpriteBatch(GraphicsDevice);
-					splashScreen = Content.Load<Texture2D>(DefaultPath);			
+					//splashScreen = Texture2D.FromFile(GraphicsDevice,DefaultPath);
+					if(!Util.IsIpad && DefaultPath.Contains("Landscape") )
+						splashScreen = Texture2D.FromImage(GraphicsDevice,Rotate(new UIImage(DefaultPath),90));
+					else
+						splashScreen = Texture2D.FromFile(GraphicsDevice,DefaultPath);
 				}
 				finally 
 				{
@@ -457,8 +469,63 @@ namespace Microsoft.Xna.Framework
 			}
 		}
 		
+		private string DefaultPngFile{
+			get{
+				if(Util.IsIpad)
+				{
+					string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), "Default*~ipad.png",SearchOption.TopDirectoryOnly);
+					if(files.Length == 0)
+						return "Default.png";
+					if(files.Length == 1)
+						return files[0];
+					else
+					//todo: switch it out by orientation
+						return "Default~ipad.png";
+				}
+				else
+				{
+					string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), "Default*~iphone.png",SearchOption.TopDirectoryOnly);
+					if(files.Length == 0)
+						return "Default.png";
+					//if(files.Length == 1)
+					//	return files[0];
+					//else
+						return files.Where(x=> !x.Contains("@2x")).FirstOrDefault();
+					return "Default~iphone.png";
+				}
+			}
+		}
+		
+		UIImage Rotate(UIImage self,float degrees)
+		{
+			return self;
+			// calculate the size of the rotated view's containing box for our drawing space
+			UIView rotatedViewBox = new UIView(new System.Drawing.RectangleF(0,0,self.Size.Width * self.CurrentScale,self.Size.Height*self.CurrentScale));
+			CGAffineTransform t = CGAffineTransform.MakeRotation(MathHelper.ToRadians(degrees));
+			rotatedViewBox.Transform = t;
+			var size = rotatedViewBox.Frame.Size;
+			Console.WriteLine(size);
+			rotatedViewBox.Dispose();
+			// Create the bitmap context
+			UIGraphics.BeginImageContext(size);
+			CGContext bitmap = UIGraphics.GetCurrentContext();
+			
+			bitmap.TranslateCTM(size.Width/2,size.Height/2);
+			
+			bitmap.RotateCTM(MathHelper.ToRadians(degrees));
+			
+   // Now, draw the rotated/scaled image into the context
+			bitmap.ScaleCTM(1,-1);
+			bitmap.DrawImage(new System.Drawing.RectangleF(-self.Size.Width*self.CurrentScale /2,-self.Size.Height*self.CurrentScale/2,self.Size.Width*self.CurrentScale,self.Size.Height*self.CurrentScale),self.CGImage);
+   			UIImage newImage = UIGraphics.GetImageFromCurrentImageContext();
+			UIGraphics.EndImageContext();
+   return newImage;	
+		}
+		
+		
 		protected virtual void UnloadContent()
 		{
+			splashScreen = null;
 			// do nothing
 		}
 		

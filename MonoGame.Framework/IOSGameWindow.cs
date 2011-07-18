@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Framework
 		}
 		
 		protected override void OnVisibleChanged(EventArgs e)
-		{			
+		{	
 			base.OnVisibleChanged(e);	
 		}
 		
@@ -357,6 +357,7 @@ namespace Microsoft.Xna.Framework
 		
 		private void FillTouchCollection(NSSet touches)
 		{
+			//TouchPanel.Reset();
 			var enabledGestures = TouchPanel.EnabledGestures;
 			if ( enabledGestures == GestureType.None )
 			{
@@ -401,8 +402,9 @@ namespace Microsoft.Xna.Framework
 							index = collection.FindById(touch.Handle.ToInt32(), out tlocation);
 							if (index >= 0)
 							{
-								tlocation.State = TouchLocationState.Invalid;
-								collection[index] = tlocation;
+								collection.Remove(tlocation);	
+								//tlocation.State = TouchLocationState.Invalid;
+								//collection[index] = tlocation;
 							}
 							break;
 						default :
@@ -483,6 +485,7 @@ namespace Microsoft.Xna.Framework
 			
 			GamePad.Instance.TouchesCancelled(touches,evt);
 		}
+		
 
 		#endregion
 						

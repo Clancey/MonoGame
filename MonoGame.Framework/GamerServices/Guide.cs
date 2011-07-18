@@ -333,19 +333,19 @@ namespace Microsoft.Xna.Framework.GamerServices
 					
 					//Console.WriteLine("window null?" + Window != null);
 					if (Window !=null)
-					{						
-						if(viewController == null)
-						{
-							//Console.WriteLine("vc != null");
-							viewController = new UIViewController();
-							Window.Add(viewController.View);
-							viewController.View.Hidden = true;
-						}
-						viewController.PresentModalViewController(leaderboardController, true);
+					{	
 						isVisible = true;
+						
+						Game.gameVc.PresentModalViewController(leaderboardController,true);
 						TouchPanel.Reset();
 					}
 			    }
+			}
+			else
+			{
+				UIAlertView alert = new UIAlertView("Error","You need to be logged into game center to view the High scores.",null,"Ok");
+				alert.Show();
+				ShowSignIn(1,true);
 			}
 		}
 
