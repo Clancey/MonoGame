@@ -293,7 +293,9 @@
 						else if (Visible && (_leftThumbDefinition != null) && (CheckThumbStickHit(_leftThumbDefinition,location)))
 						{
 							Vector2 movement = location - LeftThumbStickDefinition.InitialHit;
-							
+								
+							UpdateTouch(touch,_leftThumbDefinition);
+							LeftThumbStickDefinition.InitialHit = location;
 							
 							// Keep the stick in the "hole" 
 							float radius = (movement.X*movement.X) + (movement.Y*movement.Y);
