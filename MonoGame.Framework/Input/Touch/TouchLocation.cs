@@ -40,10 +40,12 @@
 
 #region Using clause
 using System;
+using System.Runtime.Serialization;
 #endregion Using clause
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
+	[DataContract]
     public struct TouchLocation : IEquatable<TouchLocation>
     {
 		/// <summary>
@@ -60,14 +62,19 @@ namespace Microsoft.Xna.Framework.Input.Touch
 		private float previousPressure;
 		
 		#region Properties
+		[DataMember]
 		public int Id 
 		{ 
 			get
 	        	{
 	            	return id;
 	        	}
+			internal set {
+				id = value;
+			}
 		}
-
+		
+		[DataMember]
         public Vector2 Position 
 		{ 
 			get
@@ -80,12 +87,17 @@ namespace Microsoft.Xna.Framework.Input.Touch
 			}
 		}
 		
+		[DataMember]
 		public float Pressure 
 		{ 
 			get
         	{
             	return pressure;
         	}
+			internal set 
+			{
+				pressure = value;	
+			}
 		}
 		
 		public float PrevPressure 
@@ -106,6 +118,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 			}
 		}
 		
+		[DataMember]
         public TouchLocationState State 
 		{ 
 			get

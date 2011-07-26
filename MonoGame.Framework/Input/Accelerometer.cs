@@ -47,30 +47,43 @@ namespace Microsoft.Xna.Framework.Input
 	public static class Accelerometer
 	{
 		private static AccelerometerState _state;
-		private static AccelerometerCapabilities _capabilities = new AccelerometerCapabilities();
+		private static AccelerometerCapabilities _capabilities = new AccelerometerCapabilities ();
 		private const int AccelerometerFrequency = 30;
-		private static Vector3 _accelerometerVector = new Vector3(0, 0, 0);
-		
-		public static void SetupAccelerometer()
-		{
-			UIAccelerometer.SharedAccelerometer.Acceleration += UIAccelerometerSharedAccelerometerAcceleration;				
-			UIAccelerometer.SharedAccelerometer.UpdateInterval = 1/AccelerometerFrequency;
-        }
+		private static Vector3 _accelerometerVector = new Vector3 (0, 0, 0);
 
-		static void UIAccelerometerSharedAccelerometerAcceleration (object sender, UIAccelerometerEventArgs e)
+		public static void SetupAccelerometer ()
+		{
+			UIAccelerometer.SharedAccelerometer.Acceleration += UIAccelerometerSharedAccelerometerAcceleration;
+			UIAccelerometer.SharedAccelerometer.UpdateInterval = 1 / AccelerometerFrequency;
+			//#if TARGET_IPHONE_SIMULATOR
+			AccelerometerSimulation.StartListener ();
+			//#endif
+			
+		}
+
+		static internal void UIAccelerometerSharedAccelerometerAcceleration (object sender, UIAccelerometerEventArgs e)
 		{
 			_accelerometerVector.X = (float)(e.Acceleration.X * 2);
 			_accelerometerVector.Y = (float)(e.Acceleration.Y * 2);
 			_accelerometerVector.Z = (float)(e.Acceleration.Z * 2);
-			_state.Acceleration = _accelerometerVector;				
+			_state.Acceleration = _accelerometerVector;
 		}
 
-		public static AccelerometerCapabilities GetCapabilities()
-        {
+		static internal void UIAccelerometerSharedAccelerometerAcceleration (object sender, double x, double y, double z)
+		{
+			_accelerometerVector.X = (float)(x * 2);
+			_accelerometerVector.Y = (float)(y * 2);
+			_accelerometerVector.Z = (float)(z * 2);
+			_state.Acceleration = _accelerometerVector;
+		}
+
+
+		public static AccelerometerCapabilities GetCapabilities ()
+		{
 			return _capabilities;
-        }
-		
-		public static AccelerometerState GetState()
+		}
+
+		public static AccelerometerState GetState ()
 		{
 			// For some reason, i need set this all the time to work..
 			//UIAccelerometer.SharedAccelerometer.Acceleration += UIAccelerometerSharedAccelerometerAcceleration;				

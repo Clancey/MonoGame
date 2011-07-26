@@ -97,6 +97,9 @@
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
     <Reference Include="OpenTK" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Json" />
+    <Reference Include="System.ServiceModel.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Effect\BasicEffect.cs" />
@@ -352,6 +355,10 @@
     <Compile Include="Graphics\Effect\EffectParameterType.cs" />
     <Compile Include="Graphics\Extender.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="Input\AccelerometerSimulation.cs" />
+    <Compile Include="Input\BaseFile.cs" />
+    <Compile Include="Input\TouchesData.cs" />
+    <Compile Include="Input\AccelerometerData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

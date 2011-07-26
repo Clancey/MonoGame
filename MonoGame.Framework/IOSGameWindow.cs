@@ -363,6 +363,8 @@ namespace Microsoft.Xna.Framework
 			{
 				UITouch []touchesArray = touches.ToArray<UITouch>();
 				
+				TouchCollection collection = TouchPanel.Collection;
+				collection.RemoveAll(x=> x.State == TouchLocationState.Released);
 				for (int i=0; i < touchesArray.Length;i++)
 				{	
 					//Get IOS touch
@@ -372,7 +374,6 @@ namespace Microsoft.Xna.Framework
 					Vector2 translatedPosition = GetOffsetPosition(position,true);
 					//Console.WriteLine(position  + " : " + translatedPosition);
 					TouchLocation tlocation;
-					TouchCollection collection = TouchPanel.Collection;
 					int index;
 					switch (touch.Phase)
 					{
@@ -403,6 +404,7 @@ namespace Microsoft.Xna.Framework
 							if (index >= 0)
 							{
 								collection.Remove(tlocation);	
+								Console.WriteLine("touch canceld");
 								//tlocation.State = TouchLocationState.Invalid;
 								//collection[index] = tlocation;
 							}
@@ -464,7 +466,7 @@ namespace Microsoft.Xna.Framework
 			
 			FillTouchCollection(touches);	
 			
-			GamePad.Instance.TouchesEnded(touches,evt,this);	
+			GamePad.Instance.TouchesEnded(touches,evt,this);
 			//Console.WriteLine("touches ended");
 		}
 		
