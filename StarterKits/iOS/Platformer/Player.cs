@@ -214,11 +214,11 @@ namespace Platformer
         {
             // Get analog horizontal movement.
             movement = gamePadState.ThumbSticks.Left.X * MoveStickScale;
-
+			accelState = Accelerometer.GetState();
             // Ignore small movements to prevent running in place.
             if (Math.Abs(movement) < 0.5f)
                 movement = 0.0f;
-
+			Console.WriteLine(accelState.Acceleration.Y);
             // Move the player with accelerometer
             if (Math.Abs(accelState.Acceleration.Y) > 0.10f)
             {

@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input
 			UIAccelerometer.SharedAccelerometer.UpdateInterval = 1 / AccelerometerFrequency;
 			//#if TARGET_IPHONE_SIMULATOR
 			AccelerometerSimulation.StartListener ();
-			//#endif
+			//#endifz	
 			
 		}
 

@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 		
 		internal void Update()
 		{ 
-			Console.WriteLine("----------------"+this.Count+"--------------------");
+			//Console.WriteLine("----------------"+this.Count+"--------------------");
 			aux.Clear();
 			for (int i = 0;  i <  this.Count; i++)
 			{

@@ -63,6 +63,11 @@ namespace Platformer
 #if WINDOWS_PHONE
             TargetElapsedTime = TimeSpan.FromTicks(333333);
 #endif
+#if IPHONE
+			
+			graphics.PreferredBackBufferWidth = 480;
+			graphics.PreferredBackBufferHeight = 320;
+#endif
 
 #if MONOMAC
 			graphics.PreferredBackBufferWidth = 800;
@@ -71,7 +76,6 @@ namespace Platformer
 			graphics.IsFullScreen = true;
 			graphics.SupportedOrientations =  DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 #endif			
-            Accelerometer.Initialize();
 
         }
 

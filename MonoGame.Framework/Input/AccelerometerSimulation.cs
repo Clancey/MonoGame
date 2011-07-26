@@ -65,6 +65,7 @@ namespace Microsoft.Xna.Framework.Input
 					var baseObject = serializer.ReadObject(ms) as BaseFile;
 					ms.Close();
 					var accel = baseObject.Accel;
+					Console.WriteLine(accel);
 					if(accel != null)
 						Accelerometer.UIAccelerometerSharedAccelerometerAcceleration(SharedAccelerometer,accel.X,accel.Y,accel.Z);
 					if(baseObject.Touches != null)
