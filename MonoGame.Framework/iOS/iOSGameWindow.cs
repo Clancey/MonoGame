@@ -102,7 +102,11 @@ namespace Microsoft.Xna.Framework {
                 // TODO: Calculate this only when dirty.
                 if (_viewController is iOSGameViewController)
                 {
+                    #if __TVOS__
+                    var currentOrientation = DisplayOrientation.LandscapeLeft;
+                    #else
                     var currentOrientation = OrientationConverter.ToDisplayOrientation(_viewController.InterfaceOrientation);
+                    #endif
                     int width;
                     int height;
 
@@ -133,7 +137,11 @@ namespace Microsoft.Xna.Framework {
 
 		public override DisplayOrientation CurrentOrientation {
 			get {
+                #if __TVOS__
+                return DisplayOrientation.LandscapeLeft;
+                #else
 				return OrientationConverter.ToDisplayOrientation(_viewController.InterfaceOrientation);
+                #endif
 			}
 		}
 

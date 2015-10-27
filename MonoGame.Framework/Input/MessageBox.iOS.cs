@@ -7,10 +7,15 @@ namespace Microsoft.Xna.Framework.Input
     public static partial class MessageBox
     {
         private static TaskCompletionSource<int?> tcs;
+		#if !__TVOS__
         private static UIAlertView alert;
+		#endif
 
         private static Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
+			#if __TVOS__
+			throw new NotImplementedException();
+			#else
             tcs = new TaskCompletionSource<int?>();
             UIApplication.SharedApplication.InvokeOnMainThread(delegate
             {
@@ -26,6 +31,7 @@ namespace Microsoft.Xna.Framework.Input
                 };
                 alert.Show();
             });
+			#endif
 
             return tcs.Task;
         }
@@ -34,11 +40,12 @@ namespace Microsoft.Xna.Framework.Input
         {
             if (!tcs.Task.IsCompleted)
                 tcs.SetResult(result);
-
+			#if !__TVOS__
             UIApplication.SharedApplication.InvokeOnMainThread(delegate
             {
                 alert.DismissWithClickedButtonIndex(0, true);
             });
+			#endif
         }
     }
 }

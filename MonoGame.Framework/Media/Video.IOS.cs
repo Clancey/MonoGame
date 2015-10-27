@@ -16,7 +16,9 @@ namespace Microsoft.Xna.Framework.Media
     /// </summary>
     public sealed partial class Video : IDisposable
     {
+		#if !__TVOS__
         internal MPMoviePlayerViewController MovieView { get; private set; }
+		#endif
 
         /*
         // NOTE: https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPMoviePlayerController_Class/Reference/Reference.html
@@ -42,19 +44,23 @@ namespace Microsoft.Xna.Framework.Media
         {
             var url = NSUrl.FromFilename(Path.GetFullPath(FileName));
 
+			#if !__TVOS__
             MovieView = new MPMoviePlayerViewController(url);
             MovieView.MoviePlayer.ScalingMode = MPMovieScalingMode.AspectFill;
             MovieView.MoviePlayer.ControlStyle = MPMovieControlStyle.None;
             MovieView.MoviePlayer.PrepareToPlay();
+			#endif
         }
 
         private void PlatformDispose(bool disposing)
         {
+			#if !__TVOS__
             if (MovieView == null)
                 return;
             
             MovieView.Dispose();
             MovieView = null;
+			#endif
         }
     }
 }

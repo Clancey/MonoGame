@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Framework.Media
                 return this.album.HasArt;
 #elif WINDOWS_STOREAPP || WINDOWS_UAP
                 return this.thumbnail != null;
-#elif IOS
+#elif IOS && !__TVOS__
                 // If album art is missing the bounds will be: Infinity, Infinity, 0, 0
                 return this.thumbnail != null && this.thumbnail.Bounds.Width != 0;
 #elif ANDROID
@@ -205,12 +205,16 @@ namespace Microsoft.Xna.Framework.Media
         [CLSCompliant(false)]
         public UIImage GetAlbumArt(int width = 0, int height = 0)
         {
+			#if __TVOS__
+            return null;
+			#else
             if (width == 0)
                 width = (int)this.thumbnail.Bounds.Width;
             if (height == 0)
                 height = (int)this.thumbnail.Bounds.Height;
 
 			return this.thumbnail.ImageWithSize(new CGSize(width, height));
+			#endif
         }
 #elif ANDROID
         [CLSCompliant(false)]

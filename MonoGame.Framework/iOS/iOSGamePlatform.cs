@@ -104,8 +104,9 @@ namespace Microsoft.Xna.Framework
             Directory.SetCurrentDirectory(TitleContainer.Location);
 
             _applicationObservers = new List<NSObject>();
-
+            #if !__TVOS__
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
+            #endif
 
             // Create a full-screen window
             _mainWindow = new UIWindow (UIScreen.MainScreen.Bounds);
@@ -144,7 +145,7 @@ namespace Microsoft.Xna.Framework
 
             _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoop.NSDefaultRunLoopMode);
         }
-
+       
 
         public override GameRunBehavior DefaultRunBehavior
         {
@@ -319,9 +320,12 @@ namespace Microsoft.Xna.Framework
 
 		private void ViewController_InterfaceOrientationChanged (object sender, EventArgs e)
 		{
+            #if __TVOS__
+            var orientation = DisplayOrientation.LandscapeLeft;
+            #else
 			var orientation = OrientationConverter.ToDisplayOrientation (
 				_viewController.InterfaceOrientation);
-
+            #endif
 			// FIXME: The presentation parameters for the GraphicsDevice should
 			//        be managed by the GraphicsDevice itself.  Not by
 			//        iOSGamePlatform.

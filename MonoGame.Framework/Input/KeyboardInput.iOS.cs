@@ -6,10 +6,15 @@ namespace Microsoft.Xna.Framework.Input
     public static partial class KeyboardInput
     {
         private static TaskCompletionSource<string> tcs;
-        private static UIAlertView alert;
+		#if !__TVOS__
+       	private static UIAlertView alert;
+		#endif
 
         private static Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
+			#if __TVOS__
+			throw new NotImplementedException();
+			#else
             tcs = new TaskCompletionSource<string>();
 
             UIApplication.SharedApplication.InvokeOnMainThread(delegate
@@ -40,10 +45,12 @@ namespace Microsoft.Xna.Framework.Input
             });
 
             return tcs.Task;
+			#endif
         }
 
         private static void PlatformCancel(string result)
         {
+			#if !__TVOS__
             if (!tcs.Task.IsCompleted)
                 tcs.SetResult(result);
 
@@ -51,6 +58,7 @@ namespace Microsoft.Xna.Framework.Input
             {
                 alert.DismissWithClickedButtonIndex(0, true);
             });
+			#endif
         }
     }
 }

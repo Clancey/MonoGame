@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             var songList = new List<Song>();
             var albumList = new List<Album>();
-
+			#if !__TVOS__
             foreach (var collection in MPMediaQuery.AlbumsQuery.Collections)
             {
                 var nsAlbumArtist = collection.RepresentativeItem.ValueForProperty(MPMediaItem.AlbumArtistProperty);
@@ -53,6 +53,7 @@ namespace Microsoft.Xna.Framework.Media
                     songList.Add(song);
                 }
             }
+			#endif
 
             albumCollection = new AlbumCollection(albumList);
             songCollection = new SongCollection(songList);

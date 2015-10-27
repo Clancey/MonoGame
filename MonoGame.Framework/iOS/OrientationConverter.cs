@@ -71,6 +71,7 @@ using UIKit;
 
 namespace Microsoft.Xna.Framework
 {
+    #if !__TVOS__
     public static class OrientationConverter
     {
         [CLSCompliant(false)]
@@ -144,4 +145,5 @@ namespace Microsoft.Xna.Framework
             return normalized;
         }
     }
+    #endif
 }

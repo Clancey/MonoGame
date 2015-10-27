@@ -154,6 +154,7 @@ namespace Microsoft.Xna.Framework {
 			view.ScrollIndicatorInsets = UIEdgeInsets.Zero;
 		}
 
+        #if !TVOS
         #region Autorotation for iOS 5 or older
         [Obsolete]
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
@@ -187,6 +188,7 @@ namespace Microsoft.Xna.Framework {
 			base.WillRotate(toInterfaceOrientation, duration);
 			View.LayoutSubviews ();
 		}
+        #endif
 	}
 
 	struct PaddingF {

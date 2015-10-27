@@ -41,11 +41,14 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformResume()
         {
+			#if !__TVOS__
             _currentVideo.MovieView.MoviePlayer.Play();
+			#endif
         }
 
         private void PlatformPlay()
         {
+			#if !__TVOS__
             _platform.IsPlayingVideo = true;
 
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
@@ -55,6 +58,7 @@ namespace Microsoft.Xna.Framework.Media
 
             _platform.ViewController.PresentViewController(_currentVideo.MovieView, false, null);
             _currentVideo.MovieView.MoviePlayer.Play();
+			#endif
         }
 
         private void PlatformStop()
@@ -64,8 +68,9 @@ namespace Microsoft.Xna.Framework.Media
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_playbackDidFinishObserver);
                 _playbackDidFinishObserver = null;
             }
-
+			#if !__TVOS__
             _currentVideo.MovieView.MoviePlayer.Stop();
+			#endif
             _platform.IsPlayingVideo = false;
             _platform.ViewController.DismissViewController(false, null);
         }

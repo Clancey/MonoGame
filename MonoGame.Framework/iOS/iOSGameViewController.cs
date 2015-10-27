@@ -11,12 +11,18 @@ using CoreGraphics;
 
 namespace Microsoft.Xna.Framework
 {
-    class iOSGameViewController : UIViewController
+    class iOSGameViewController :
+	#if !__TVOS__
+	UIViewController
+	#else
+	GameController.GCEventViewController
+	#endif
     {
         iOSGamePlatform _platform;
 
         public iOSGameViewController(iOSGamePlatform platform)
         {
+            ControllerUserInteractionEnabled = false;
             if (platform == null)
                 throw new ArgumentNullException("platform");
             _platform = platform;
@@ -40,6 +46,9 @@ namespace Microsoft.Xna.Framework
             {
                 UIScreen screen = UIScreen.MainScreen;
 
+                #if __TVOS__
+                    frame = new CGRect(0, 0, screen.Bounds.Width, screen.Bounds.Height);
+                #else
                 // iOS 7 and older reverses width/height in landscape mode when reporting resolution,
                 // iOS 8+ reports resolution correctly in all cases
                 if (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight)
@@ -50,6 +59,7 @@ namespace Microsoft.Xna.Framework
                 {
 					frame = new CGRect(0, 0, screen.Bounds.Width, screen.Bounds.Height);
                 }
+                #endif
             }
 
             base.View = new iOSGameView(_platform, frame);
@@ -63,7 +73,11 @@ namespace Microsoft.Xna.Framework
         {
             get { return (iOSGameView)base.View; }
         }
-
+        public override void RemoteControlReceived(UIEvent theEvent)
+        {
+            base.RemoteControlReceived(theEvent);
+        }
+        #if !__TVOS__
         #region Autorotation for iOS 5 or older
         public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
         {
@@ -72,7 +86,6 @@ namespace Microsoft.Xna.Framework
             return (toOrientation & supportedOrientations) == toOrientation;
         }
         #endregion
-
         #region Autorotation for iOS 6 or newer
         public override UIInterfaceOrientationMask GetSupportedInterfaceOrientations()
         {
@@ -94,6 +107,7 @@ namespace Microsoft.Xna.Framework
                 handler(this, EventArgs.Empty);
         }
 
+        #endif
         #region Hide statusbar for iOS 7 or newer
         public override bool PrefersStatusBarHidden()
         {
@@ -108,6 +122,7 @@ namespace Microsoft.Xna.Framework
         {
 			CGSize oldSize = View.Bounds.Size;
 
+            #if !__TVOS__
             if (oldSize != toSize)
             {
                 UIInterfaceOrientation prevOrientation = InterfaceOrientation;
@@ -125,6 +140,7 @@ namespace Microsoft.Xna.Framework
                     });
 
             }
+            #endif
 
             base.ViewWillTransitionToSize(toSize, coordinator);
         }
